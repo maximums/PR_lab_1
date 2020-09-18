@@ -1,21 +1,38 @@
 import requests
-import concurrent.futures
+from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 
 base_url = 'http://localhost:5000'
-base_request = requests.get(base_url + '/register').json()
-r1 = requests.get(base_url + base_request['link'], headers = {'X-Access-Token': base_request['access_token']})
-def make_requests(next_route, access_token, e):
-    req = requests.get(base_url + next_route, headers = {'X-Access-Token': access_token})
-    print(req.json())
-    if 'link' in req.json():
-        for lin in req.json()['link'].values():
-            e.submit(make_requests, lin, access_token, e)
-    return req.json()
-def main():
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        for next_route in r1.json()['link'].values():
-            executor.submit(make_requests, next_route, base_request['access_token'],executor)
-        
+register_req = requests.get(base_url + '/register').json()
+base_request = requests.get(base_url +  register_req['link'], headers={'X-Access-Token' : register_req['access_token']}).json()
+data_resp = []
+
+def make_request(route, access_token):
+    response = requests.get(base_url + route, headers={'X-Access-Token' : access_token}).json()
+    data_resp.append(response)
+    next_routes = []
+
+    if 'link' in response:
+        for link in response['link'].values():
+            next_routes.append(link)        
+    return next_routes
+
+def main(args):
+    while args[0]:
+        done, args[0] = wait(args[0], return_when=FIRST_COMPLETED)
+        for future in done:
+            if future:
+                for link in future.result():
+                    args[0].add(args[1].submit(make_request, link, args[2]))
+
+def start_point():
+    e = ThreadPoolExecutor(max_workers=12)
+    futures = {
+        e.submit(make_request, link, register_req['access_token']) : link for link in base_request['link'].values()
+    }
+    return [futures, e, register_req['access_token']]
 
 if __name__ == "__main__":
-    main()
+    main(start_point())
+    for date in data_resp:
+        print(date)
+
