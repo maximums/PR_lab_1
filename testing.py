@@ -1,6 +1,6 @@
 import requests
 from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
-import json, xmltodict, csv, yaml
+import json, xmltodict, yaml
 
 data_resp = []
 
@@ -40,13 +40,14 @@ def make_request(route, access_token, base_url):
             next_routes.append(link)        
     return next_routes
 
-def main(args):
-    while args[0]:
-        done, args[0] = wait(args[0], return_when=FIRST_COMPLETED)
+def main():
+    futures, e, access_token, base_url = start_point()
+    while futures:
+        done, futures = wait(futures, return_when=FIRST_COMPLETED)
         for future in done:
             if future:
                 for link in future.result():
-                    args[0].add(args[1].submit(make_request, link, args[2], args[3]))
+                    futures.add(e.submit(make_request, link, access_token, base_url))
 
 def start_point():
     base_url = 'http://localhost:5000'
@@ -57,10 +58,10 @@ def start_point():
     futures = {
         e.submit(make_request, link, register_req['access_token'], base_url) : link for link in base_request['link'].values()
     }
-    return [futures, e, register_req['access_token'], base_url]
+    return futures, e, register_req['access_token'], base_url
 
 if __name__ == "__main__":
-    main(start_point())
+    main()
     for date in data_resp:
         print(date)
 
