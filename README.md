@@ -11,17 +11,21 @@
 7. Make a concurrent TCP server, serving the fetched content, that will respond to (mandatory) a column selector message, like __selectColumn column_name__, or __selectFromColumn column_name glob_pattern__.
 
 ### Connection to TCP:<br>
-![Output](https://github.com/maximums/TMPS/blob/master/img/output.png)
+![Output](https://github.com/maximums/PR_lab_1/blob/master/img/conn.png)
 <br>
 
-### TCP input and output:
-![Output](https://github.com/maximums/TMPS/blob/master/img/output.png)
+### TCP input:
+![Output](https://github.com/maximums/PR_lab_1/blob/master/img/input.png)
 <br>
 
-![Output](https://github.com/maximums/TMPS/blob/master/img/output.png)
+### TCP output:
+![Output](https://github.com/maximums/PR_lab_1/blob/master/img/output1.png)
 <br>
 
-![Output](https://github.com/maximums/TMPS/blob/master/img/output.png)
+![Output](https://github.com/maximums/PR_lab_1/blob/master/img/output2.png)
+<br>
+
+![Output](https://github.com/maximums/PR_lab_1/blob/master/img/output3.png)
 
 
 
