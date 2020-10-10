@@ -1,6 +1,7 @@
 import requests
-from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 import json, xmltodict, yaml
+from TCPServer import server as tcp_ser
+from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 
 data_resp = []
 
@@ -69,4 +70,4 @@ def start_point():
 
 if __name__ == "__main__":
     main()
-    print(data_resp)
+    tcp_ser('localhost', 5001, data_resp)
