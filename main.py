@@ -8,7 +8,8 @@ final_data = []
 
 def make_request(route, access_token, base_url):
     response = requests.get(base_url + route, headers={'X-Access-Token' : access_token})
-    final_data.append(data_merge(json.loads(response.text)))
+    for itm in data_merge(json.loads(response.text)):
+        final_data.append(itm)
     next_routes = []
     if 'link' in response.json():
         for link in response.json()['link'].values():

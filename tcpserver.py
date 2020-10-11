@@ -31,22 +31,19 @@ def command_pattern(data, data_list, connection):
     data_words = data.split(' ')
     if data_words[0] == 'selectColumn':
         if data_words[1] == 'all':
-            for ls in data_list:
-                for dic in ls:
-                    for item in dic.items():
-                        connection.sendall((str(item)+'\n\r').encode())
-            return
-        for ls in data_list:
-            for dic in ls:
+            for dic in data_list:
+                for item in dic.items():
+                    connection.sendall((str(item)+'\n\r').encode())
+        else:
+            for dic in data_list:
                 for item in dic.items():
                     if data_words[1] == item[0]:
                         connection.sendall((str(item)+'\n\r').encode())
     elif data_words[0] == 'selectFromColumn':
-        for ls in data_list:
-            for dic in ls:
-                for item in dic.items():
-                    if data_words[1] == item[0] and data_words[2] == item[1]:
-                        connection.sendall((str(dic)+'\n\r').encode())
+        for dic in data_list:
+            for item in dic.items():
+                if data_words[1] == item[0] and data_words[2] == item[1]:
+                    connection.sendall((str(dic)+'\n\r').encode())
     else:
         connection.sendall("\n\rInvalid input\n\rTry 'selectColumn column_name/all or selectFromColumn column_name glob_pattern\r\n".encode())
             
