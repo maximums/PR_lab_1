@@ -23,11 +23,11 @@ def handler(connection, client_address, data_list):
             if not data:
                 break
             data = data.decode()
-            command_pattern(data, data_list, connection)
+            req_server(data, data_list, connection)
     finally:
         connection.close()
 
-def command_pattern(data, data_list, connection):
+def req_server(data, data_list, connection):
     data_words = data.split(' ')
     if data_words[0] == 'selectColumn':
         if data_words[1] == 'all':

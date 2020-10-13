@@ -1,6 +1,6 @@
 import json
 import requests
-from tcpserver import server as tcp_ser
+from tcpserver import server
 from parsedata import to_common_data_type as data_merge
 from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 
@@ -37,4 +37,4 @@ def start_point():
     return futures, executor, register_req['access_token'], base_url
 
 if __name__ == "__main__":
-    tcp_ser('localhost', 5001, main())
+    server('localhost', 5001, main())
